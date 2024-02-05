@@ -11,10 +11,34 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String   @id @default(uuid())
   name     String
   email    String
   password String
+  clients  Client[]
 
   @@map("user")
+}
+
+model Client {
+  id        String     @id @default(uuid())
+  userId    String
+  name      String
+  phone     String
+  email     String
+  schedules Schedule[]
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@map("client")
+}
+
+model Schedule {
+  id          String   @id @default(uuid())
+  clientId    String
+  date        DateTime
+  description String
+  status      String
+  client      Client   @relation(fields: [clientId], references: [id])
+
+  @@map("schedule")
 }
