@@ -17,13 +17,10 @@ export class ClientsService {
     }
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     try {
-      // TODO: get id from token before get all clients
-      const MOCK_USER_ID = '9e2aee67-898b-44d6-8bf0-b1ff1ec08d65';
-
       const clients = await this.prisma.client.findMany({
-        where: { userId: MOCK_USER_ID },
+        where: { userId },
       });
 
       return clients;
@@ -32,13 +29,10 @@ export class ClientsService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, userId: string) {
     try {
-      // TODO: get id from token before get all clients
-      const MOCK_USER_ID = '9e2aee67-898b-44d6-8bf0-b1ff1ec08d65';
-
       const client = await this.prisma.client.findUniqueOrThrow({
-        where: { userId: MOCK_USER_ID, id },
+        where: { userId, id },
       });
 
       return client;
@@ -47,13 +41,10 @@ export class ClientsService {
     }
   }
 
-  async update(id: string, updateClientDto: UpdateClientDto) {
+  async update(id: string, updateClientDto: UpdateClientDto, userId: string) {
     try {
-      // TODO: get id from token before get all clients
-      const MOCK_USER_ID = '9e2aee67-898b-44d6-8bf0-b1ff1ec08d65';
-
       const clientUpdated = await this.prisma.client.update({
-        where: { userId: MOCK_USER_ID, id },
+        where: { userId, id },
         data: updateClientDto,
       });
 
@@ -63,12 +54,11 @@ export class ClientsService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     try {
-      // TODO: get id from token and usage to delete with client id
-      const MOCK_USER_ID = '9e2aee67-898b-44d6-8bf0-b1ff1ec08d65';
-
-      await this.prisma.client.delete({ where: { userId: MOCK_USER_ID, id } });
-    } catch (error) {}
+      await this.prisma.client.delete({ where: { userId, id } });
+    } catch (error) {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
   }
 }

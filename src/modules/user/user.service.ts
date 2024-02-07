@@ -46,6 +46,18 @@ export class UserService {
     }
   }
 
+  async findOne(email: string) {
+    try {
+      const user = await this.prisma.user.findFirstOrThrow({
+        where: { email },
+      });
+
+      return user;
+    } catch (error) {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async remove(id: string) {
     try {
       await this.prisma.user.delete({ where: { id } });
